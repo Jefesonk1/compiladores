@@ -119,12 +119,12 @@ TOKEN: {
 | <FINALIZATION: "finalization">
 | <FINALLY: "finally">
 | <INITIALIZATION: "initialization">
-| <INLINE: "inline">
+//| <INLINE: "inline">
 | <IS: "is">
 | <LIBRARY: "library">
 | <ON: "on">
 | <OUT: "out">
-| <PACKED: "packed">
+//| <PACKED: "packed">
 | <PROPERTY: "property">
 | <RAISE: "raise">
 | <RESOURCESTRING: "resourcestring">
@@ -134,8 +134,8 @@ TOKEN: {
 
 //slareservada
 TOKEN: {
-  <ABSOLUTE: "absolute">
-| <ABSTRACT: "abstract">
+//  <ABSOLUTE: "absolute">
+  <ABSTRACT: "abstract">
 | <ALIAS: "alias">
 | <ASSEMBLER: "assembler">
 | <BITPACKED: "bitpacked">
@@ -144,7 +144,7 @@ TOKEN: {
 | <CONTINUE: "continue">
 | <CPPDECL: "cppdecl">
 | <CVAR: "cvar">
-| <DEFAULT: "default">
+| <_DEFAULT: "default">
 | <DEPRECATED: "deprecated">
 | <DYNAMIC: "dynamic">
 | <ENUMERATOR: "enumerator">
@@ -179,7 +179,7 @@ TOKEN: {
 | <PUBLISHED: "published">
 | <READ: "read">
 | <REGISTER: "register">
-| <REINTRODUCE: "reintroduce">
+//| <REINTRODUCE: "reintroduce">
 | <RESULT: "result">
 | <SAFECALL: "safecall">
 | <SAVEREGISTERS: "saveregisters">
@@ -210,8 +210,7 @@ TOKEN: {
                   | <OCTALDIGITSEQUENCE>
                   | <BINARYDIGITSEQUENCE>
                   | <DIGITSEQUENCE> >
-|  <UNSIGNEDREAL: (<DIGITSEQUENCE>)+ "." (<DIGITSEQUENCE>)* <SCALEFACTOR> >
-
+|  <UNSIGNEDREAL: (<DIGITSEQUENCE>)+ "." (<DIGITSEQUENCE>)* (<SCALEFACTOR>)? >
 }
 
 
@@ -233,7 +232,24 @@ TOKEN: {
 |  <#SIGNEDNUMBER: <SIGN> <UNSIGNEDNUMBER> >
 }
 
-
+TOKEN:
+{
+  <DOUBLELEFTARROW: "<<">
+| <DOUBLERIGHTARROW: ">>">
+| <DOUBLEASTERISK: "**">
+| <LEFTRIGHTARROW: "<>">
+| <RIGHTLEFTARROW: "><">
+| <LESSTHANOREQUALS: "<=">
+| <GREATHERTHANOREQUALS: ">=">
+| <ASSIGMENT: ":=">
+| <PLUSEQUALS: "+=">
+| <MINUSEQUALS: "-=">
+| <TIMESEQUALS: "*=">
+| <SLASHEQUALS: "/=">
+| <OPENPARENTHESISDOT: "(.">
+| <DOTCLOSEPARENTHESIS: ".)">
+//| <DOUBLESLASH: "//">
+}
 
 
 
@@ -259,33 +275,17 @@ TOKEN:
 | <AT: "@">
 // | <OPENCURLYBRACKETS: "{">
 // | <CLOSECURLYBRACKETS: "}">
-| <DOLLAR: "$">
+//| <DOLLAR: "$">
 | <HASH: "#">
 // | <AMPERSAND: "&">
-| <PERCENT: "%">
+//| <PERCENT: "%">
 }
 
 
 
 //| <OPENPARENTHESISASTERISK: "(*">
 //| <ASTERISKCLOSEPARENTHESIS: "*)">
-TOKEN:
-{
-  <DOUBLELEFTARROW: "<<">
-| <DOUBLERIGHTARROW: ">>">
-| <LEFTRIGHTARROW: "<>">
-| <RIGHTLEFTARROW: "><">
-| <LESSTHANOREQUALS: "<=">
-| <GREATHERTHANOREQUALS: ">=">
-| <ASSIGMENT: ":=">
-| <PLUSEQUALS: "+=">
-| <MINUSEQUALS: "-=">
-| <TIMESEQUALS: "*=">
-| <SLASHEQUALS: "/=">
-| <OPENPARENTHESISDOT: "(.">
-| <DOTCLOSEPARENTHESIS: ".)">
-//| <DOUBLESLASH: "//">
-}
+
 
 
 // letter
@@ -304,7 +304,10 @@ TOKEN: {
   //copiar tudo depois &
 }
 
-
+TOKEN: {
+  <#STRINGCHARATER: [" " - "&", "(" - "~"] >
+| <QUOTETEDSTRING: "'" (<STRINGCHARATER>)* "'" >
+}
 
 
 // TOKEN: {
@@ -370,72 +373,6 @@ TOKEN: {
 // | <#MULTILINECHARS: (("\"")? ("\"")? <CHARNODOUBLEQUOTES> )* ("\"")* >
 // | <#CHARNODOUBLEQUOTES:  ~["\""] >
 // }
-
-
-void FreePascal() :
-  {Token t;}
-  {
-    (
-      //RESERVED KEYWORDS
-      t=<ABSOLUTE> { System.out.println("ABSOLUTE "+t.image); }
-    | t=<IDENTIFIER> { System.out.println("INDENTIFIER "+t.image); }
-    | t=<AND> { System.out.println("AND "+t.image); }
-    | t=<ARRAY> { System.out.println("ARRAY "+t.image); }
-    | t=<ASM> { System.out.println("ASM "+t.image); }
-    | t=<BEGIN> { System.out.println("BEGIN "+t.image); }
-    | t=<CASE> { System.out.println("CASE "+t.image); }
-    | t=<CONST> { System.out.println("CONST "+t.image); }
-    | t=<CONSTRUCTOR> { System.out.println("CONSTRUCTOR "+t.image); }
-    | t=<DESTRUCTOR> { System.out.println("DESTRUCTOR "+t.image); }
-    | t=<DIV> { System.out.println("DIV "+t.image); }
-    | t=<DO> { System.out.println("DO "+t.image); }
-    | t=<DOWNTO> { System.out.println("DOWNTO "+t.image); }
-    | t=<ELSE> { System.out.println("ELSE "+t.image); }
-    | t=<END> { System.out.println("END "+t.image); }
-    | t=<FILE> { System.out.println("FILE "+t.image); }
-    | t=<FOR> { System.out.println("FOR "+t.image); }
-    | t=<FUNCTION> { System.out.println("FUNCTION "+t.image); }
-    | t=<GOTO> { System.out.println("GOTO "+t.image); }
-    | t=<IF> { System.out.println("IF "+t.image); }
-    | t=<IMPLEMENTATION> { System.out.println("IMPLEMENTATION "+t.image); }
-    | t=<IN> { System.out.println("IN "+t.image); }
-    | t=<INHERITED> { System.out.println("INHERITED "+t.image); }
-    | t=<INLINE> { System.out.println("INLINE "+t.image); }
-    | t=<INTERFACE> { System.out.println("INTERFACE "+t.image); }
-    | t=<LABEL> { System.out.println("LABEL "+t.image); }
-    | t=<MOD> { System.out.println("MOD "+t.image); }
-    | t=<NIL> { System.out.println("NIL "+t.image); }
-    | t=<NOT> { System.out.println("NOT "+t.image); }
-    | t=<OBJECT> { System.out.println("OBJECT "+t.image); }
-    | t=<OF> { System.out.println("OF "+t.image); }
-    | t=<OPERATOR> { System.out.println("OPERATOR "+t.image); }
-    | t=<OR> { System.out.println("OR "+t.image); }
-    | t=<PACKED> { System.out.println("PACKED "+t.image); }
-    | t=<PROCEDURE> { System.out.println("PROCEDURE "+t.image); }
-    | t=<PROGRAM> { System.out.println("PROGRAM "+t.image); }
-    | t=<RECORD> { System.out.println("RECORD "+t.image); }
-    | t=<REINTRODUCE> { System.out.println("REINTRODUCE "+t.image); }
-    | t=<REPEAT> { System.out.println("REPEAT "+t.image); }
-    | t=<SELF> { System.out.println("SELF "+t.image); }
-    | t=<SET> { System.out.println("SET "+t.image); }
-    | t=<SHL> { System.out.println("SHL "+t.image); }
-    | t=<SHR> { System.out.println("SHR "+t.image); }
-    | t=<STRING> { System.out.println("STRING "+t.image); }
-    | t=<THEN> { System.out.println("THEN "+t.image); }
-    | t=<TO> { System.out.println("TO "+t.image); }
-    | t=<TYPE> { System.out.println("TYPE "+t.image); }
-    | t=<UNIT> { System.out.println("UNIT "+t.image); }
-    | t=<UNTIL> { System.out.println("UNTIL "+t.image); }
-    | t=<USES> { System.out.println("USES "+t.image); }
-    | t=<VAR> { System.out.println("VAR "+t.image); }
-    | t=<WHILE> { System.out.println("WHILE "+t.image); }
-    | t=<WITH> { System.out.println("WITH "+t.image); }
-    | t=<XOR> { System.out.println("XOR "+t.image); }
-    | t=<DOLLAR> { System.out.println("DOLLAR "+t.image); }
-    )*
-
-    <EOF>
-  } 
 
 
 
