@@ -119,12 +119,12 @@ TOKEN: {
 | <FINALIZATION: "finalization">
 | <FINALLY: "finally">
 | <INITIALIZATION: "initialization">
-| <INLINE: "inline">
+//| <INLINE: "inline">
 | <IS: "is">
 | <LIBRARY: "library">
 | <ON: "on">
 | <OUT: "out">
-| <PACKED: "packed">
+//| <PACKED: "packed">
 | <PROPERTY: "property">
 | <RAISE: "raise">
 | <RESOURCESTRING: "resourcestring">
@@ -134,8 +134,8 @@ TOKEN: {
 
 //slareservada
 TOKEN: {
-  <ABSOLUTE: "absolute">
-| <ABSTRACT: "abstract">
+//  <ABSOLUTE: "absolute">
+  <ABSTRACT: "abstract">
 | <ALIAS: "alias">
 | <ASSEMBLER: "assembler">
 | <BITPACKED: "bitpacked">
@@ -144,7 +144,7 @@ TOKEN: {
 | <CONTINUE: "continue">
 | <CPPDECL: "cppdecl">
 | <CVAR: "cvar">
-| <DEFAULT: "default">
+//| <DEFAULT: "default">
 | <DEPRECATED: "deprecated">
 | <DYNAMIC: "dynamic">
 | <ENUMERATOR: "enumerator">
@@ -179,7 +179,7 @@ TOKEN: {
 | <PUBLISHED: "published">
 | <READ: "read">
 | <REGISTER: "register">
-| <REINTRODUCE: "reintroduce">
+//| <REINTRODUCE: "reintroduce">
 | <RESULT: "result">
 | <SAFECALL: "safecall">
 | <SAVEREGISTERS: "saveregisters">
@@ -205,14 +205,14 @@ SPECIAL_TOKEN: {
 
 //hexadecimal digit sequence 
 
-TOKEN: {
-  <UNSIGNEDINTEGER: <HEXDIGITSEQUENCE>
-                  | <OCTALDIGITSEQUENCE>
-                  | <BINARYDIGITSEQUENCE>
-                  | <DIGITSEQUENCE> >
-|  <UNSIGNEDREAL: (<DIGITSEQUENCE>)+ "." (<DIGITSEQUENCE>)* <SCALEFACTOR> >
+// TOKEN: {
+//   <UNSIGNEDINTEGER: <HEXDIGITSEQUENCE>
+//                   | <OCTALDIGITSEQUENCE>
+//                   | <BINARYDIGITSEQUENCE>
+//                   | <DIGITSEQUENCE> >
+// |  <UNSIGNEDREAL: (<DIGITSEQUENCE>)+ "." (<DIGITSEQUENCE>)* <SCALEFACTOR> >
 
-}
+// }
 
 
 
@@ -225,12 +225,14 @@ TOKEN: {
 | <#BINARYDIGIT: ["0","1"]>
 | <#SIGN: "+" | "-">
 | <#SCALEFACTOR: ("E" | "e") (<SIGN>)? (<DIGIT>)+ >
-|  <#HEXDIGITSEQUENCE: "$" (<HEXDIGIT>)+ >
-|  <#OCTALDIGITSEQUENCE: "&" (<OCTALDIGIT>)+ >
-|  <#BINARYDIGITSEQUENCE: "%" (<BINARYDIGIT>)+ >
+|  <REAL: (<SIGN>)? (<DIGITSEQUENCE>)+ "." (<DIGITSEQUENCE>)* (<SCALEFACTOR>)? >
+|  <HEXDIGITSEQUENCE: (<SIGN>)? "$" (<HEXDIGIT>)+ >
+|  <OCTALDIGITSEQUENCE: (<SIGN>)? "&" (<OCTALDIGIT>)+ >
+|  <BINARYDIGITSEQUENCE: (<SIGN>)? "%" (<BINARYDIGIT>)+ >
 |  <#DIGITSEQUENCE: <DIGIT> (<DIGIT>)* >
-|  <#UNSIGNEDNUMBER: <UNSIGNEDREAL> | <UNSIGNEDINTEGER> >
-|  <#SIGNEDNUMBER: <SIGN> <UNSIGNEDNUMBER> >
+|  <DECIMALSEQUENCE: (<SIGN>)? <DIGIT> (<DIGIT>)* >
+// |  <#UNSIGNEDNUMBER: <UNSIGNEDREAL> | <UNSIGNEDINTEGER> >
+// |  <#SIGNEDNUMBER: <SIGN> <UNSIGNEDNUMBER> >
 }
 
 
