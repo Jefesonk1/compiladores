@@ -1,9 +1,6 @@
-
 options{
     IGNORE_CASE = true;
 }
-
-
 
 PARSER_BEGIN(FreePascal)
 import java.io.*;
@@ -45,399 +42,240 @@ SKIP: {
 | "\n"
 | "\r"
 | "\r\n"
-| <STARCOMMENT: "(*" (~["*"])* "*)">
-| <CURLYBRACKETSCOMMENT: "{" (~["}"])* "}">
-| <SINGLELINECOMMENT: "//" (~["\n", "\r"])*>
+| <STAR_COMMENT: "(*" (~["*"])* "*)">
+| <CURLY_BRACKETS_COMMENT: "{" (~["}"])* "}">
+| <SINGLE_LINE_COMMENT: "//" (~["\n", "\r"])*>
 
 }
 
-//Turbo Pascal reserved words
+// Turbo Pascal reserved words
 TOKEN: {
-  <ABSOLUTE: "absolute">
-| <AND: "and">
-| <ARRAY: "array">
-| <ASM: "asm">
-| <BEGIN: "begin">
-| <CASE: "case">
-| <CONST: "const">
-| <CONSTRUCTOR: "constructor">
-| <DESTRUCTOR: "destructor">
-| <DIV: "div">
-| <DO: "do">
-| <DOWNTO: "downto">
-| <ELSE: "else">
-| <END: "end">
-| <FILE: "file">
-| <FOR: "for">
-| <FUNCTION: "function">
-| <GOTO: "goto">
-| <IF: "if">
-| <IMPLEMENTATION: "implementation">
-| <IN: "in">
-| <INHERITED: "inherited">
-| <INLINE: "inline">
-| <INTERFACE: "interface">
-| <LABEL: "label">
-| <MOD: "mod">
-| <NIL: "nil">
-| <NOT: "not">
-| <OBJECT: "object">
-| <OF: "of">
-| <OPERATOR: "operator">
-| <OR: "or">
-| <PACKED: "packed">
-| <PROCEDURE: "procedure">
-| <PROGRAM: "program">
-| <RECORD: "record  ">
-| <REINTRODUCE: "reintroduce">
-| <REPEAT: "repeat">
-| <SELF: "self">
-| <SET: "set">
-| <SHL: "shl">
-| <SHR: "shr">
-| <STRING: "string">
-| <THEN: "then">
-| <TO: "to">
-| <TYPE: "type">
-| <UNIT: "unit">
-| <UNTIL: "until">
-| <USES: "uses">
-| <VAR: "var">
-| <WHILE: "while">
-| <WITH: "with">
-| <XOR: "xor">
+  <RESERVED_ABSOLUTE: "absolute">
+| <RESERVED_AND: "and">
+| <RESERVED_ARRAY: "array">
+| <RESERVED_ASM: "asm">
+| <RESERVED_BEGIN: "begin">
+| <RESERVED_CASE: "case">
+| <RESERVED_CONST: "const">
+| <RESERVED_CONSTRUCTOR: "constructor">
+| <RESERVED_DESTRUCTOR: "destructor">
+| <RESERVED_DIV: "div">
+| <RESERVED_DO: "do">
+| <RESERVED_DOWNTO: "downto">
+| <RESERVED_ELSE: "else">
+| <RESERVED_END: "end">
+| <RESERVED_FILE: "file">
+| <RESERVED_FOR: "for">
+| <RESERVED_FUNCTION: "function">
+| <RESERVED_GOTO: "goto">
+| <RESERVED_IF: "if">
+| <RESERVED_IMPLEMENTATION: "implementation">
+| <RESERVED_IN: "in">
+| <RESERVED_INHERITED: "inherited">
+| <RESERVED_INLINE: "inline">
+| <RESERVED_INTERFACE: "interface">
+| <RESERVED_LABEL: "label">
+| <RESERVED_MOD: "mod">
+| <RESERVED_NIL: "nil">
+| <RESERVED_NOT: "not">
+| <RESERVED_OBJECT: "object">
+| <RESERVED_OF: "of">
+| <RESERVED_OPERATOR: "operator">
+| <RESERVED_OR: "or">
+| <RESERVED_PACKED: "packed">
+| <RESERVED_PROCEDURE: "procedure">
+| <RESERVED_PROGRAM: "program">
+| <RESERVED_RECORD: "record  ">
+| <RESERVED_REINTRODUCE: "reintroduce">
+| <RESERVED_REPEAT: "repeat">
+| <RESERVED_SELF: "self">
+| <RESERVED_SET: "set">
+| <RESERVED_SHL: "shl">
+| <RESERVED_SHR: "shr">
+| <RESERVED_STRING: "string">
+| <RESERVED_THEN: "then">
+| <RESERVED_TO: "to">
+| <RESERVED_TYPE: "type">
+| <RESERVED_UNIT: "unit">
+| <RESERVED_UNTIL: "until">
+| <RESERVED_USES: "uses">
+| <RESERVED_VAR: "var">
+| <RESERVED_WHILE: "while">
+| <RESERVED_WITH: "with">
+| <RESERVED_XOR: "xor">
 }
 
-
-//Object pascal reserved words
+// Object Pascal reserved words
 TOKEN: {
-  <AS: "as">
-| <CLASS: "class">
-| <DISPINTERFACE: "dispinterface">
-| <EXCEPT: "except">
-| <EXPORTS: "exports">
-| <FINALIZATION: "finalization">
-| <FINALLY: "finally">
-| <INITIALIZATION: "initialization">
-//| <INLINE: "inline">
-| <IS: "is">
-| <LIBRARY: "library">
-| <ON: "on">
-| <OUT: "out">
-//| <PACKED: "packed">
-| <PROPERTY: "property">
-| <RAISE: "raise">
-| <RESOURCESTRING: "resourcestring">
-| <THREADVAR: "threadvar">
-| <TRY: "try">
+  <RESERVED_AS: "as">
+| <RESERVED_CLASS: "class">
+| <RESERVED_DISPINTERFACE: "dispinterface">
+| <RESERVED_EXCEPT: "except">
+| <RESERVED_EXPORTS: "exports">
+| <RESERVED_FINALIZATION: "finalization">
+| <RESERVED_FINALLY: "finally">
+| <RESERVED_INITIALIZATION: "initialization">
+| <RESERVED_IS: "is">
+| <RESERVED_LIBRARY: "library">
+| <RESERVED_ON: "on">
+| <RESERVED_OUT: "out">
+| <RESERVED_PROPERTY: "property">
+| <RESERVED_RAISE: "raise">
+| <RESERVED_RESOURCESTRING: "resourcestring">
+| <RESERVED_THREADVAR: "threadvar">
+| <RESERVED_TRY: "try">
 }
 
-//slareservada
+// Modfiers reserved
 TOKEN: {
-//  <ABSOLUTE: "absolute">
-  <ABSTRACT: "abstract">
-| <ALIAS: "alias">
-| <ASSEMBLER: "assembler">
-| <BITPACKED: "bitpacked">
-| <BREAK: "break">
-| <CDECL: "cdecl">
-| <CONTINUE: "continue">
-| <CPPDECL: "cppdecl">
-| <CVAR: "cvar">
-//| <DEFAULT: "default">
-| <DEPRECATED: "deprecated">
-| <DYNAMIC: "dynamic">
-| <ENUMERATOR: "enumerator">
-| <EXPERIMENTAL: "experimental">
-| <EXPORT: "export">
-| <EXTERNAL: "external">
-| <FAR: "far">
-| <FAR16: "far16">
-| <FORWARD: "forward">
-| <GENERIC: "generic">
-| <HELPER: "helper">
-| <IMPLEMENTS: "implements">
-| <INDEX: "index">
-| <INTERRUPT: "interrupt">
-| <IOCHECK: "iocheck">
-| <LOCAL: "local">
-| <MESSAGE: "message">
-| <NAME: "name">
-| <NEAR: "near">
-| <NODEFAULT: "nodefault">
-| <NORETURN: "noreturn">
-| <NOSTACKFRAME: "nostackframe">
-| <OLDFPCCALL: "oldfpccall">
-| <OTHERWISE: "otherwise">
-| <OVERLOAD: "overload">
-| <OVERRIDE: "override">
-| <PASCAL: "pascal">
-| <PLATFORM: "platform">
-| <PRIVATE: "private">
-| <PROTECTED: "protected">
-| <PUBLIC: "public">
-| <PUBLISHED: "published">
-| <READ: "read">
-| <REGISTER: "register">
-//| <REINTRODUCE: "reintroduce">
-| <RESULT: "result">
-| <SAFECALL: "safecall">
-| <SAVEREGISTERS: "saveregisters">
-| <SOFTFLOAT: "softfloat">
-| <SPECIALIZE: "specialize">
-| <STATIC: "static">
-| <STDCALL: "stdcall">
-| <STORED: "stored">
-| <STRICT: "strict">
-| <UNALIGNED: "unaligned">
-| <UNIMPLEMENTED: "unimplemented">
-| <VARARGS: "varargs">
-| <VIRTUAL: "virtual">
-| <WINAPI: "winapi">
-| <WRITE: "write">
+  <RESERVED_ABSTRACT: "abstract">
+| <RESERVED_ALIAS: "alias">
+| <RESERVED_ASSEMBLER: "assembler">
+| <RESERVED_BITPACKED: "bitpacked">
+| <RESERVED_BREAK: "break">
+| <RESERVED_CDECL: "cdecl">
+| <RESERVED_CONTINUE: "continue">
+| <RESERVED_CPPDECL: "cppdecl">
+| <RESERVED_CVAR: "cvar">
+| <RESERVED_DEFAULT: "default">
+| <RESERVED_DEPRECATED: "deprecated">
+| <RESERVED_DYNAMIC: "dynamic">
+| <RESERVED_ENUMERATOR: "enumerator">
+| <RESERVED_EXPERIMENTAL: "experimental">
+| <RESERVED_EXPORT: "export">
+| <RESERVED_EXTERNAL: "external">
+| <RESERVED_FAR: "far">
+| <RESERVED_FAR16: "far16">
+| <RESERVED_FORWARD: "forward">
+| <RESERVED_GENERIC: "generic">
+| <RESERVED_HELPER: "helper">
+| <RESERVED_IMPLEMENTS: "implements">
+| <RESERVED_INDEX: "index">
+| <RESERVED_INTERRUPT: "interrupt">
+| <RESERVED_IOCHECK: "iocheck">
+| <RESERVED_LOCAL: "local">
+| <RESERVED_MESSAGE: "message">
+| <RESERVED_NAME: "name">
+| <RESERVED_NEAR: "near">
+| <RESERVED_NODEFAULT: "nodefault">
+| <RESERVED_NORETURN: "noreturn">
+| <RESERVED_NOSTACKFRAME: "nostackframe">
+| <RESERVED_OLDFPCCALL: "oldfpccall">
+| <RESERVED_OTHERWISE: "otherwise">
+| <RESERVED_OVERLOAD: "overload">
+| <RESERVED_OVERRIDE: "override">
+| <RESERVED_PASCAL: "pascal">
+| <RESERVED_PLATFORM: "platform">
+| <RESERVED_PRIVATE: "private">
+| <RESERVED_PROTECTED: "protected">
+| <RESERVED_PUBLIC: "public">
+| <RESERVED_PUBLISHED: "published">
+| <RESERVED_READ: "read">
+| <RESERVED_REGISTER: "register">
+| <RESERVED_RESULT: "result">
+| <RESERVED_SAFECALL: "safecall">
+| <RESERVED_SAVEREGISTERS: "saveregisters">
+| <RESERVED_SOFTFLOAT: "softfloat">
+| <RESERVED_SPECIALIZE: "specialize">
+| <RESERVED_STATIC: "static">
+| <RESERVED_STDCALL: "stdcall">
+| <RESERVED_STORED: "stored">
+| <RESERVED_STRICT: "strict">
+| <RESERVED_UNALIGNED: "unaligned">
+| <RESERVED_UNIMPLEMENTED: "unimplemented">
+| <RESERVED_VARARGS: "varargs">
+| <RESERVED_VIRTUAL: "virtual">
+| <RESERVED_WINAPI: "winapi">
+| <RESERVED_WRITE: "write">
 }
-
 
 SPECIAL_TOKEN: {
   <AMPERSAND: "&">
 }
 
-
-//hexadecimal digit sequence 
-
-// TOKEN: {
-//   <UNSIGNEDINTEGER: <HEXDIGITSEQUENCE>
-//                   | <OCTALDIGITSEQUENCE>
-//                   | <BINARYDIGITSEQUENCE>
-//                   | <DIGITSEQUENCE> >
-// |  <UNSIGNEDREAL: (<DIGITSEQUENCE>)+ "." (<DIGITSEQUENCE>)* <SCALEFACTOR> >
-
-// }
-
-
-
-//digits
+// Digits
 TOKEN: {
-  <#DIGIT: "0" | <NONZERODIGIT> >
-| <#NONZERODIGIT: ["1"-"9"]>
-| <#HEXDIGIT: <DIGIT> | ["A"-"F"] | ["a"-"f"]>
-| <#OCTALDIGIT: ["0"-"7"]>
-| <#BINARYDIGIT: ["0","1"]>
+  <#DIGIT: "0" | <NON_ZERO_DIGIT> >
+| <#NON_ZERO_DIGIT: ["1"-"9"]>
+| <#HEX_DIGIT: <DIGIT> | ["A"-"F"] | ["a"-"f"]>
+| <#OCTAL_DIGIT: ["0"-"7"]>
+| <#BINARY_DIGIT: ["0","1"]>
 | <#SIGN: "+" | "-">
-| <#SCALEFACTOR: ("E" | "e") (<SIGN>)? (<DIGIT>)+ >
-|  <REAL: (<SIGN>)? (<DIGITSEQUENCE>)+ "." (<DIGITSEQUENCE>)* (<SCALEFACTOR>)? >
-|  <HEXDIGITSEQUENCE: (<SIGN>)? "$" (<HEXDIGIT>)+ >
-|  <OCTALDIGITSEQUENCE: (<SIGN>)? "&" (<OCTALDIGIT>)+ >
-|  <BINARYDIGITSEQUENCE: (<SIGN>)? "%" (<BINARYDIGIT>)+ >
-|  <#DIGITSEQUENCE: <DIGIT> (<DIGIT>)* >
-|  <DECIMALSEQUENCE: (<SIGN>)? <DIGIT> (<DIGIT>)* >
-// |  <#UNSIGNEDNUMBER: <UNSIGNEDREAL> | <UNSIGNEDINTEGER> >
-// |  <#SIGNEDNUMBER: <SIGN> <UNSIGNEDNUMBER> >
+| <#SCALE_FACTOR: ("E" | "e") (<SIGN>)? (<DIGIT>)+ >
+|  <REAL: (<SIGN>)? (<DIGIT_SEQUENCE>)+ "." (<DIGIT_SEQUENCE>)* (<SCALE_FACTOR>)? >
+|  <HEX_DIGIT_SEQUENCE: (<SIGN>)? "$" (<HEX_DIGIT>)+ >
+|  <OCTAL_DIGIT_SEQUENCE: (<SIGN>)? "&" (<OCTAL_DIGIT>)+ >
+|  <BINARY_DIGIT_SEQUENCE: (<SIGN>)? "%" (<BINARY_DIGIT>)+ >
+|  <#DIGIT_SEQUENCE: <DIGIT> (<DIGIT>)* >
+|  <DECIMAL_SEQUENCE: (<SIGN>)? <DIGIT> (<DIGIT>)* >
+| <#UNSIGNED_INTEGER: <HEX_DIGIT_SEQUENCE>
+                      | <OCTAL_DIGIT_SEQUENCE>
+                      | <BINARY_DIGIT_SEQUENCE>
+                      | <DIGIT_SEQUENCE> >
 }
 
-
-
-
-
-// special symbols
+// Compound symbols
 TOKEN:
 {
-  <QUOTE: "'">
+  <NOT_EQUALS: "!=">
+| <DOUBLE_LEFT_ARROW: "<<">
+| <DOUBLE_RIGHT_ARROW: ">>">
+| <LEFT_RIGHT_ARROW: "<>">
+| <RIGHT_LEFT_ARROW: "><">
+| <LESS_THAN_OR_EQUALS: "<=">
+| <GREATHER_THAN_OR_EQUALS: ">=">
+| <ASSIGMENT: ":=">
+| <PLUS_EQUALS: "+=">
+| <MINUS_EQUALS: "-=">
+| <TIMES_EQUALS: "*=">
+| <SLASH_EQUALS: "/=">
+| <OPEN_PARENTHESIS_DOT: "(.">
+| <DOT_CLOSE_PARENTHESIS: ".)">
+}
+
+// Special symbols
+TOKEN:
+{
+  <SEMI: ";">
 | <PLUS: "+">
 | <MINUS: "-">
 | <ASTERISK: "*">
 | <SLASH: "/">
 | <EQUALS: "=">
-| <LESSTHAN: "<">
-| <GREATERTHAN: ">">
-| <OPENBRACKETS: "[">
-| <CLOSEBRACKETS: "]">
+| <LESS_THAN: "<">
+| <GREATER_THAN: ">">
+| <OPEN_BRACKETS: "[">
+| <CLOSE_BRACKETS: "]">
 | <DOT: ".">
 | <COMMA: ",">
-| <OPENPARENTHESIS: "(">
-| <CLOSEPARENTHESIS: ")">
+| <OPEN_PARENTHESIS: "(">
+| <CLOSE_PARENTHESIS: ")">
 | <COLON: ":">
 | <CARET: "^">
 | <AT: "@">
-// | <OPENCURLYBRACKETS: "{">
-// | <CLOSECURLYBRACKETS: "}">
-| <DOLLAR: "$">
-| <HASH: "#">
-// | <AMPERSAND: "&">
-| <PERCENT: "%">
 }
 
-
-
-//| <OPENPARENTHESISASTERISK: "(*">
-//| <ASTERISKCLOSEPARENTHESIS: "*)">
-TOKEN:
-{
-  <DOUBLELEFTARROW: "<<">
-| <DOUBLERIGHTARROW: ">>">
-| <LEFTRIGHTARROW: "<>">
-| <RIGHTLEFTARROW: "><">
-| <LESSTHANOREQUALS: "<=">
-| <GREATHERTHANOREQUALS: ">=">
-| <ASSIGMENT: ":=">
-| <PLUSEQUALS: "+=">
-| <MINUSEQUALS: "-=">
-| <TIMESEQUALS: "*=">
-| <SLASHEQUALS: "/=">
-| <OPENPARENTHESISDOT: "(.">
-| <DOTCLOSEPARENTHESIS: ".)">
-//| <DOUBLESLASH: "//">
-}
-
-
-// letter
+// Strings
 TOKEN: {
-  <#LETTER: <LOWER>|<UPPER> >
+  <#STRING_CHARACTER: [" " - "&", "(" - "~"] >
+| <#CONTROL_STRING: "#" <UNSIGNED_INTEGER> >
+| <#QUOTETED_STRING: "'" (<STRING_CHARACTER>)* "'" >
+| <CHARACTER_STRING: ( <QUOTETED_STRING> | <CONTROL_STRING> )+ >
+}
+
+// Letter
+TOKEN: {
+  <#LETTER: <LOWER> | <UPPER> >
 | <#LOWER: ["a"-"z"]>
 | <#UPPER: ["A"-"Z","_"]>
 }
 
-
-
-
-//identifier
+// Identifiers
 TOKEN: {
   <IDENTIFIER: (<AMPERSAND>)? <LETTER> (<LETTER> | <DIGIT>)* > 
-  //copiar tudo depois &
 }
 
-
-
-
-// TOKEN: {
-//   <#CHARESCAPESEQ: "\\" ["b", "t", "n", "f", "r", "\"", "\'", "\\"] >
-// | <#PRINTABLECHAR: [" " - "~"] >
-// | <#PRINTABLECHARNODOUBLEQUOTE: [" ","!", "#" - "~"]>
-// }
-
-// TOKEN: {
-//   <CHARACTERLITERAL: "\'" (<PRINTABLECHAR> | <CHARESCAPESEQ> ) "\'" >
-// | <STRINGLITERAL: "\"" (<STRINGELEMENT>)* "\"" >
-// | <#STRINGELEMENT: <PRINTABLECHARNODOUBLEQUOTE> | <CHARESCAPESEQ> >
-// }
-
-// //INTEGER LITERAL
-// TOKEN: {
-//   <INTEGER: ("-")? (<DECIMAL> | <HEX>) ("L" | "l")? >
-// | <#DECIMAL: ("0" | <NONZERODIGIT>) (<DIGIT>)* >
-// | <#HEX: "0" ("x" | "X") <HEXDIGIT> (<HEXDIGIT>)* >
-// | <#DIGIT: "0" | <NONZERODIGIT> >
-// | <#NONZERODIGIT: ["1"-"9"]>
-// | <#HEXDIGIT: ["0"-"9", "A"-"F"]>
-// }
-
-
-//{*}
-//(&)
-//[?]
-
-// //FLOAT LITERAL
-// TOKEN: {
-//   <FLOAT: ("-")? (<TYPE1> |  <TYPE2> | <TYPE3> | <TYPE4>) >
-// | <#TYPE1: <DIGIT> (<DIGIT>)* "." <DIGIT> (<DIGIT>)* (<EXPONENTPART>)? (<FLOATTYPE>)?   >
-// | <#TYPE2: "." <DIGIT> (<DIGIT>)* (<EXPONENTPART>)? (<FLOATTYPE>)?>
-// | <#TYPE3: <DIGIT> (<DIGIT>)* <EXPONENTPART> (<FLOATTYPE>)?>
-// | <#TYPE4: <DIGIT> (<DIGIT>)* (<EXPONENTPART>)? <FLOATTYPE> >
-// | <#EXPONENTPART: ("E" | "e") ("+" | "-")? <DIGIT> (<DIGIT>)* >
-// | <#FLOATTYPE: "F"|"f"|"D"|"d">
-// }
-
-// TOKEN: {
-//   <#LETTER: <LOWER>|<UPPER> >
-// | <#LOWER: ["a"-"z"]>
-// | <#UPPER: ["A"-"Z","_"]>
-// }
-
-// TOKEN: {
-//   <ID: <PLAINID> | ("`" (<STRINGELEMENT>)* "`") >
-// | <#PLAINID: (<UPPER> <IDREST>) | <VARID> | <OP> >
-// | <#OP: <OPCHAR> (<OPCHAR>)*>
-// | <#VARID: <LOWER> <IDREST> >
-// | <#IDREST: (<LETTER> | <DIGIT>)* ("_" <OP>)? >
-// | <#OPCHAR : ["!","#","%","&","*","+","-","/",":","<","=",">","?","@","\\","^","|","~"]>
-
-// }
-
-// TOKEN: {
-//   <DELIMITER: "." | ";" | "," >
-// }
-
-// TOKEN: {
-//   <MULTILINESTRING: "\"\"\"" <MULTILINECHARS> "\"\"\"" >
-// | <#MULTILINECHARS: (("\"")? ("\"")? <CHARNODOUBLEQUOTES> )* ("\"")* >
-// | <#CHARNODOUBLEQUOTES:  ~["\""] >
-// }
-
-
-void FreePascal() :
-  {Token t;}
-  {
-    (
-      //RESERVED KEYWORDS
-      t=<ABSOLUTE> { System.out.println("ABSOLUTE "+t.image); }
-    | t=<IDENTIFIER> { System.out.println("INDENTIFIER "+t.image); }
-    | t=<AND> { System.out.println("AND "+t.image); }
-    | t=<ARRAY> { System.out.println("ARRAY "+t.image); }
-    | t=<ASM> { System.out.println("ASM "+t.image); }
-    | t=<BEGIN> { System.out.println("BEGIN "+t.image); }
-    | t=<CASE> { System.out.println("CASE "+t.image); }
-    | t=<CONST> { System.out.println("CONST "+t.image); }
-    | t=<CONSTRUCTOR> { System.out.println("CONSTRUCTOR "+t.image); }
-    | t=<DESTRUCTOR> { System.out.println("DESTRUCTOR "+t.image); }
-    | t=<DIV> { System.out.println("DIV "+t.image); }
-    | t=<DO> { System.out.println("DO "+t.image); }
-    | t=<DOWNTO> { System.out.println("DOWNTO "+t.image); }
-    | t=<ELSE> { System.out.println("ELSE "+t.image); }
-    | t=<END> { System.out.println("END "+t.image); }
-    | t=<FILE> { System.out.println("FILE "+t.image); }
-    | t=<FOR> { System.out.println("FOR "+t.image); }
-    | t=<FUNCTION> { System.out.println("FUNCTION "+t.image); }
-    | t=<GOTO> { System.out.println("GOTO "+t.image); }
-    | t=<IF> { System.out.println("IF "+t.image); }
-    | t=<IMPLEMENTATION> { System.out.println("IMPLEMENTATION "+t.image); }
-    | t=<IN> { System.out.println("IN "+t.image); }
-    | t=<INHERITED> { System.out.println("INHERITED "+t.image); }
-    | t=<INLINE> { System.out.println("INLINE "+t.image); }
-    | t=<INTERFACE> { System.out.println("INTERFACE "+t.image); }
-    | t=<LABEL> { System.out.println("LABEL "+t.image); }
-    | t=<MOD> { System.out.println("MOD "+t.image); }
-    | t=<NIL> { System.out.println("NIL "+t.image); }
-    | t=<NOT> { System.out.println("NOT "+t.image); }
-    | t=<OBJECT> { System.out.println("OBJECT "+t.image); }
-    | t=<OF> { System.out.println("OF "+t.image); }
-    | t=<OPERATOR> { System.out.println("OPERATOR "+t.image); }
-    | t=<OR> { System.out.println("OR "+t.image); }
-    | t=<PACKED> { System.out.println("PACKED "+t.image); }
-    | t=<PROCEDURE> { System.out.println("PROCEDURE "+t.image); }
-    | t=<PROGRAM> { System.out.println("PROGRAM "+t.image); }
-    | t=<RECORD> { System.out.println("RECORD "+t.image); }
-    | t=<REINTRODUCE> { System.out.println("REINTRODUCE "+t.image); }
-    | t=<REPEAT> { System.out.println("REPEAT "+t.image); }
-    | t=<SELF> { System.out.println("SELF "+t.image); }
-    | t=<SET> { System.out.println("SET "+t.image); }
-    | t=<SHL> { System.out.println("SHL "+t.image); }
-    | t=<SHR> { System.out.println("SHR "+t.image); }
-    | t=<STRING> { System.out.println("STRING "+t.image); }
-    | t=<THEN> { System.out.println("THEN "+t.image); }
-    | t=<TO> { System.out.println("TO "+t.image); }
-    | t=<TYPE> { System.out.println("TYPE "+t.image); }
-    | t=<UNIT> { System.out.println("UNIT "+t.image); }
-    | t=<UNTIL> { System.out.println("UNTIL "+t.image); }
-    | t=<USES> { System.out.println("USES "+t.image); }
-    | t=<VAR> { System.out.println("VAR "+t.image); }
-    | t=<WHILE> { System.out.println("WHILE "+t.image); }
-    | t=<WITH> { System.out.println("WITH "+t.image); }
-    | t=<XOR> { System.out.println("XOR "+t.image); }
-    | t=<DOLLAR> { System.out.println("DOLLAR "+t.image); }
-    )*
-
-    <EOF>
-  } 
-
-
-
+// Labels
+TOKEN: {
+  <#LABEL: <DIGIT_SEQUENCE> | <IDENTIFIER> >
+}
