@@ -275,7 +275,66 @@ TOKEN: {
   <IDENTIFIER: (<AMPERSAND>)? <LETTER> (<LETTER> | <DIGIT>)* > 
 }
 
+
 // Labels
 TOKEN: {
   <#LABEL: <DIGIT_SEQUENCE> | <IDENTIFIER> >
+}
+
+
+void Exp(): {}{
+  <IDENTIFIER>  | <REAL> | <CHARACTER_STRING>
+}
+
+
+/*
+ * Ordinary constants
+ */
+
+void Constant_declaration(): {}{
+  <IDENTIFIER> = Expression() HintDirectives();
+}
+
+void Typed_constant_declaration(): {}{
+  <IDENTIFIER> = Type() Typed_constant() HintDirectives();
+}
+
+void Typed_constant(): {}{
+  Constant() | Adress_Constant() | ArrayConstant() | Record_Constant() | ProceduralConstant();
+}
+
+/*
+ * Base types
+ */
+
+
+
+void Program_parameter(): {}{
+  
+}
+
+void Program_header(): {}{
+  <RESERVED_PROGRAM> <IDENTIFIER> ()
+} 
+
+void Programs(): {}{
+  <IDENTIFIER>  | <REAL> | <CHARACTER_STRING>
+}
+
+
+////////////////////
+
+//12.1 expressions
+
+void Term(): {}{
+  Factor() <ASTERISK> | <SLASH> | <RESERVED_DIV> | <RESERVED_MOD> | <RESERVED_AND> | <RESERVED_SHL> | <RESERVED_SHR> | <RESERVED_AS>
+}
+
+void Simple_expression(): {}{
+  Term() <PLUS> | <MINUS> | <RESERVED_OR> | <RESERVED_XOR>
+}
+
+
+void Expression(): {}{
+  Simple_expression()
 }
