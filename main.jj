@@ -323,9 +323,82 @@ void Programs(): {}{
 
 
 ////////////////////
+//statements
+
+void While_statement(): {} {
+  <RESERVED_WHILE> Expression() <RESERVED_DO> Statement()
+}
+
+
+void If_statement(): {} {
+  <RESERVED_IF> Expression() <RESERVED_THEN> Statement() (<RESERVED_ELSE> Statement())?
+}
+
+
+void Compound_statement(): {} {
+  <RESERVED_BEGIN> Statement() (<SEMI> Statement())*  <RESERVED_END>
+}
+
+void Repetitive_statement(): {} {
+  For_statement() | For_In_statement() | Repeat_statement() | While_statement()
+}
+
+void Conditional_statement(): {} {
+  Case_Statement() | If_Statement()
+}
+
+
+void Structured_statement(): {} {
+  Compound_statement() | Conditional_statement() | Repetitive_statement()
+}
+
+
+
+void Goto_statement(): {} {
+  <RESERVED_GOTO> <LABEL>
+}
+
+
+void Procedure_statement(): {} {
+  Procedure_Identifier() | Method_identifier() | Qualified_method_identifier() | Variable_reference() (ActualParameterList())*
+}
+
+
+void Assignment_statement(): {} {
+  (Variable_reference() | Function_identifier()) (<ASSIGMENT> | <PLUS_EQUALS> | <MINUS_EQUALS> | <TIMES_EQUALS> | <SLASH_EQUALS>) Expression()
+}
+
+
+
+void Simple_statement(): {} {
+  Assignment_statement() | Procedure_statement() | Goto_statement() | Raise_Statement()
+}
+
+
+void statement(): {} {
+  (<label> <COLON>)* (Simple_statement() | Structured_statement())*
+}
+
+
 
 //12.1 expressions
+void ActualParameterList(): {}{
+  <OPEN_PARENTHESIS> (Expression() <COMMA>)* <CLOSE_PARENTHESIS>
+}
 
+void Function_call(): {}{
+  (Function_identifier() | Variable_reference()) ActualParameterList()
+}
+
+
+void Unsigned_constant(): {}{
+  <UNSIGNED_NUMBER> | <CHARACTER_STRING> | Constant_Identifier() | <RESERVED_NIL>
+}
+
+void Factor(): {}
+{
+  <OPEN_PARENTHESIS> Expression() <CLOSE_PARENTHESIS> | Variable_reference() | Function_call() | UnsignedConstant() | <RESERVED_NOT> Factor | <SIGN> Factor()  
+}
 void Term(): {}{
   Factor() <ASTERISK> | <SLASH> | <RESERVED_DIV> | <RESERVED_MOD> | <RESERVED_AND> | <RESERVED_SHL> | <RESERVED_SHR> | <RESERVED_AS>
 }
