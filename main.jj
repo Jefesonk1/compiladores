@@ -347,8 +347,29 @@ void WhileStatement(): {} {
   <RESERVED_WHILE> Expression() <RESERVED_DO> Statement()
 }
 
+void Expression(): {} {
+  SimpleExpression() (( <LESS_THAN> | <LESS_THAN_OR_EQUALS> | <GREATER_THAN> | <GREATHER_THAN_OR_EQUALS> | <EQUALS> | <LEFT_RIGHT_ARROW> | <RESERVED_IN> | <RESERVED_IS>) SimpleExpression())?
+}
 
+void SimpleExpression(): {} {
+  Term() ((<PLUS> | <MINUS> | <RESERVED_OR> | <RESERVED_XOR>) Term())*
+}
 
+void Term() :{}
+{
+  Factor() (<ASTERISK> | <DIV> | <MOD> | <AND> ) factor()*
+}
+
+void Factor() :{}
+{
+  ID (<LBRACE> Expression() <RBRACE>)?
+  |
+  <NUM>
+  |
+  <LPAREN> expression() <RPAREN>
+  |
+  (<ADD> | <SUB> | <NOT>) factor()
+}
 
 
 // void Exp(): {}{
