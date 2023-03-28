@@ -1,4 +1,4 @@
-// Generated from c:\Users\Jefeson\Desktop\jubiladores\xxxxxxxxxxxxxxxxxxx\pascal.g4 by ANTLR 4.9.2
+// Generated from c:\Users\serva\Desktop\jubiladores\compiladores\compiladores\xxxxxxxxxxxxxxxxxxx\pascal.g4 by ANTLR 4.9.2
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;

@@ -28,10 +28,10 @@ public class FreePascal {
       }
     }
   }
-    // for(Token t = getNextToken(); t.kind != EOF; t = getNextToken()){
-    //   System.out.println(CONSTANTES.get(t.kind)+ " "+t.image);
-    // }
-    lex.Program();
+    for(Token t = getNextToken(); t.kind != EOF; t = getNextToken()){
+      System.out.println(CONSTANTES.get(t.kind)+ " "+t.image);
+    }
+    //lex.Program();
   }
 }
 
@@ -190,6 +190,13 @@ TOKEN: {
 | <RESERVED_WRITE: "write">
 }
 
+// Reserved words
+TOKEN: {
+  <RESERVED_TRUE: "true">
+| <RESERVED_FALSE: "false">
+} 
+
+
 SPECIAL_TOKEN: {
   <AMPERSAND: "&">
 }
@@ -203,13 +210,13 @@ TOKEN: {
 | <#BINARY_DIGIT: ["0","1"]>
 | <#SIGN: "+" | "-">
 | <#SCALE_FACTOR: ("E" | "e") (<SIGN>)? (<DIGIT>)+ >
-|  <UNSIGNED_REAL: (<DIGIT_SEQUENCE>)+ "." (<DIGIT_SEQUENCE>)* (<SCALE_FACTOR>)? >
-|  <#HEX_DIGIT_SEQUENCE: "$" (<HEX_DIGIT>)+ >
-|  <#OCTAL_DIGIT_SEQUENCE: "&" (<OCTAL_DIGIT>)+ >
-|  <#BINARY_DIGIT_SEQUENCE: "%" (<BINARY_DIGIT>)+ >
-|  <#DIGIT_SEQUENCE: <DIGIT> (<DIGIT>)* >
-|  <#DECIMAL_SEQUENCE: <DIGIT> (<DIGIT>)* >
-| <UNSIGNED_INTEGER: <HEX_DIGIT_SEQUENCE>
+| <UNSIGNED_REAL: (<DIGIT_SEQUENCE>)+ "." (<DIGIT_SEQUENCE>)* (<SCALE_FACTOR>)? >
+| <HEX_DIGIT_SEQUENCE: "$" (<HEX_DIGIT>)+ >
+| <OCTAL_DIGIT_SEQUENCE: "&" (<OCTAL_DIGIT>)+ >
+| <BINARY_DIGIT_SEQUENCE: "%" (<BINARY_DIGIT>)+ >
+| <#DIGIT_SEQUENCE: <DIGIT> (<DIGIT>)* >
+| <DECIMAL_SEQUENCE: <DIGIT_SEQUENCE> >
+| <#UNSIGNED_INTEGER: <HEX_DIGIT_SEQUENCE>
                       | <OCTAL_DIGIT_SEQUENCE>
                       | <BINARY_DIGIT_SEQUENCE>
                       | <DIGIT_SEQUENCE> >
@@ -217,8 +224,8 @@ TOKEN: {
 
 // Compound symbols
 TOKEN:
-{ 
-| <DOUBLE_LEFT_ARROW: "<<">
+{
+  <DOUBLE_LEFT_ARROW: "<<">
 | <DOUBLE_RIGHT_ARROW: ">>">
 | <NOT_EQUALS: "<>">
 | <RIGHT_LEFT_ARROW: "><">
@@ -273,407 +280,5 @@ TOKEN: {
 
 // Identifiers
 TOKEN: {
-  <IDENTIFIER: (<AMPERSAND>)? <LETTER> (<LETTER> | <DIGIT>)* > 
+  <IDENTIFIER: (<AMPERSAND>)? <LETTER> (<LETTER> | <DIGIT>)* >
 }
-
-
-// Labels
-TOKEN: {
-  <#LABEL: <DIGIT_SEQUENCE> | <IDENTIFIER> >
-}
-
-
-void Program(): {} {
-  <RESERVED_PROGRAM> <IDENTIFIER> <SEMI> Block() <DOT>
-}
-
-void Block(): {} {
-  //block = ["var", varblock], [funcblock], statements;
-
-  (<RESERVED_VAR> VarBlock())? (FuncBlock())? Statements()
-}
-void VarDeclaration (): {} {
- // identifier, {",", identifier}, ":", type;
-  <IDENTIFIER> (<COMMA> <IDENTIFIER>)* <COLON> Type() //mudar type
-}
-void VarBlock(): {} {
-  //varblock = var_declaration, {";", var_declaration};
-  VarDeclaration() (<SEMI> VarDeclaration())*
-}
-
-void FuncBlock(): {} {
-  //funcblock = "function", identifier, "(", {var_declaration}, ")", ":", type, ";", block;
-  <RESERVED_FUNCTION> <IDENTIFIER> <OPEN_PARENTHESIS> (VarDeclaration())* <CLOSE_PARENTHESIS> <COLON> Type() <SEMI> Block()
-}
-
-void Statements(): {} {
-  //statements = "begin", statement, {";", statement}, [";"], "end";
-  <RESERVED_BEGIN> Statement() (<SEMI> Statement())* (<SEMI>)? <RESERVED_END>
-}
-
-void Statement(): {} {
-  //statement = attribution | statements | print | if | while;
-  Assignment() | Statements() | If() | While()
-}
-
-void If(): {} {
-  //if = "if", expression, "then", statement, ["else", statement];
-  <RESERVED_IF> Expression() <RESERVED_THEN> Statement() (<RESERVED_ELSE> Statement())?
-}
-
-void While(): {} {
-  //while = "while", expression, "do", statement;
-  <RESERVED_WHILE> Expression() <RESERVED_DO> Statement()
-}
-
-void Assignment(): {} {
- // attribution = identifier, ":=", expression | read;
-  <IDENTIFIER> <ASSIGMENT> Expression() //| Read()
-}
-
-void Expression(): {} {
-  //expression = simple_expression, {("<" | ">" | "="), simple_expression};
-  SimpleExpression() (
-    (
-      <LESS_THAN>
-    | <LESS_THAN_OR_EQUALS>
-    | <GREATER_THAN>
-    | <GREATHER_THAN_OR_EQUALS>
-    | <EQUALS>
-    | <LEFT_RIGHT_ARROW>
-    | <RESERVED_IN>
-    | <RESERVED_IS>
-    ) SimpleExpression()
-    )*
-}
-
-void SimpleExpression(): {} {
-  //simple_expression = term, {("+" | "-" | "or"), term};
-  Term() ((<PLUS> | <MINUS> | <RESERVED_OR> | <RESERVED_XOR>) Term())*
-}
-
-void Term(): {} {
-  //term = factor, {("*", "/", "and"), factor};
-  Factor() ((<ASTERISK> | <SLASH> | <RESERVED_AND>) Factor())* 
-}
-// TOKEN: {
-//   <NUMBER: "0" | <NON_ZERO_DIGIT> >
-// }
-void Factor(): {} {
-  //factor = ({"+" | "-" | "not"}, factor) | number | ("(", expression, ")") | identifier | funccall;
-  ((<PLUS> | <MINUS> | <RESERVED_NOT>) Factor()) | <DECIMAL_SEQUENCE> | (<OPEN_PARENTHESIS> Expression() <CLOSE_PARENTHESIS>) | <IDENTIFIER> | FuncCall()
-}
-
-void FuncCall(): {} {
-  //funccall = identifier, "(", [expression, {";", expression}], ")";
-  <IDENTIFIER> <OPEN_PARENTHESIS> (Expression() (<SEMI> Expression())*)? <CLOSE_PARENTHESIS>
-}
-void Type(): {} {
-  type = "bool" | "integer" | <RESERVED_STRING>
-}
-
-
-
-
-// void Block(): {} {
-//   DeclarationPart() StatementPart()
-// }
-
-// void DeclarationPart(): {} {
-//   ((ConstantDeclarationPart() | TypeDeclarationPart() | VariableDeclarationPart() | FunctionDeclarationPart())?)*
-// }
-
-// void ConstantDeclarationPart(): {} {
-//   <RESERVED_CONST> ( ConstantDeclaration() | TypedConstatDeclaration())*
-// }
-
-// void TypeDeclarationPart(): {} {
-//   <RESERVED_TYPE> TypeDeclaration()*
-// }
-
-// void VariableDeclarationPart(): {} {
-//   <RESERVED_VAR> VariableDeclaration()*
-// }
-
-// void FunctionDeclarationPart(): {} {
-//   FunctionDeclaration()*
-// }
-
-// void StatementPart(): {} {
-//   CompoundStatement()
-// }
-
-// void Statement(): {} {
-//   (SimpleStatement() | StructuredStatement())?
-// }
-
-// void SimpleStatement(): {} {
-//   AssignmentStatement() | ProcedureStatement()
-// }
-
-// void AssignmentStatement(): {} {
-//   (VariableReference() | FunctionIdentifier())  (<ASSIGMENT> | <PLUS_EQUALS> | <MINUS_EQUALS> | <TIMES_EQUALS> | <SLASH_EQUALS>) Expression()
-// }
-
-// void StructuredStatement(): {} {
-//   CompoundStatement() | ConditionalStatement() | RepetitiveStatement()
-// }
-
-// void ConditionalStatement(): {} {
-//   IfStatement()
-// }
-
-// void RepetitiveStatement(): {} {
-//   WhileStatement()
-// }
-
-// void IfStatement(): {} {
-//   <RESERVED_IF> Expression() <RESERVED_THEN> Statement() (<RESERVED_ELSE> Statement())?
-// }
-
-// void WhileStatement(): {} {
-//   <RESERVED_WHILE> Expression() <RESERVED_DO> Statement()
-// }
-
-// void Expression(): {} {
-//   SimpleExpression() (( <LESS_THAN> | <LESS_THAN_OR_EQUALS> | <GREATER_THAN> | <GREATHER_THAN_OR_EQUALS> | <EQUALS> | <LEFT_RIGHT_ARROW> | <RESERVED_IN> | <RESERVED_IS>) SimpleExpression())?
-// }
-
-// void SimpleExpression(): {} {
-//   Term() ((<PLUS> | <MINUS> | <RESERVED_OR> | <RESERVED_XOR>) Term())*
-// }
-
-// void Term() :{}
-// {
-//   Factor() (<ASTERISK> | <DIV> | <MOD> | <AND> ) factor()*
-// }
-
-// void Factor() :{}
-// {
-//   <OPEN_PARENTHESIS> Expression() <CLOSE_PARENTHESIS> | VariableReference() | FunctionCall() | UnsignedConstant() | <RESERVED_NOT> Factor()
-// }
-
-// void UnsignedConstant(): {} {
-//   UnsigendNumber() | CharacterString() | ConstantIdentifier() | <RESERVED_NIL>
-// }
-
-// void FunctionCall(): {} {
-//   (FunctionIdentifier() | VariableReference()) (ActualParameterList())?
-// }
-
-// void ActualParameterList(): {} {
-//   <OPEN_PARENTHESIS> Expression()? (<COMMA> Expression())* <CLOSE_PARENTHESIS>
-// }
-
-
-
-
-
-// void Exp(): {}{
-//   <IDENTIFIER>  | <REAL> | <CHARACTER_STRING>
-// }
-
-
-// /*
-//  * Ordinary constants
-//  */
-
-// void Constant_declaration(): {}{
-//   <IDENTIFIER> = Expression() HintDirectives();
-// }
-
-// void Typed_constant_declaration(): {}{
-//   <IDENTIFIER> = Type() Typed_constant() HintDirectives();
-// }
-
-// void Typed_constant(): {}{
-//   Constant() | Adress_Constant() | ArrayConstant() | Record_Constant() | ProceduralConstant();
-// }
-
-// /*
-//  * Base types
-//  */
-
-
-
-// void Program_parameter(): {}{
-  
-// }
-
-// void Program_header(): {}{
-//   <RESERVED_PROGRAM> <IDENTIFIER> ()
-// } 
-
-// void Programs(): {}{
-//   <IDENTIFIER>  | <REAL> | <CHARACTER_STRING>
-// }
-
-
-
-
-
-////////////////////
-//operator definition
-
-
-
-
-// void Operator_Definition(): {} {
-//   <RESERVED_OPERATOR> (Assignment_operator_definition() | Arithmetic_operator_definition() | Comparison_operator_definition() | Logical_operator_definition() | Other_operator_definition() )
-// }
-
-
-
-
-
-// //procedure and functions
-
-// void  Constant_Parameter(): {} {
-//   <RESERVERD_CONST> (Identifier_list() (<COLON> (<RESERVED_ARRAY> <RESERVED_OF>)? Type_Identifier() )?  ) | (<IDENTIFIER> <COLON> Type_Identifier() <EQUALS> Default_Parameter_Value())
-// }
-
-// void  Out_Parameter(): {} {
-//   <RESERVERD_OUT> Identifier_list() (<COLON> (<RESERVED_ARRAY> <RESERVED_OF>)? Type_Identifier() )?   
-// }
-
-
-// void  Variable_Parameter(): {} {
-//   <RESERVERD_VAR> Identifier_list() (<COLON> (<RESERVED_ARRAY> <RESERVED_OF>)? Type_Identifier() )?   
-// }
-
-//  void ValueParameter(): {} {
-//   (Identifier_list() <COLON> (<RESERVED_ARRAY> <OF>)? Parameter_Type() )| (<IDENTIFIER> <COLON> Type_Identifier() <EQUALS> Default_Parameter_Value())
-// }
-// void ParameterDeclaration(): {} {
-//   ValueParameter() | VariableParameter() | OutParameter() | ConstantParameter()
-// }
-
-// void  Formal_Parameter_List(): {} {
-//   <OPEN_PARENTHESIS> ParameterDeclaration() (<SEMI> ParameterDeclaration())* <CLOSE_PARENTHESIS>
-// }
-//  void Function_declaration(): {} {
-//   Function_header() <SEMI> Subroutine_block() <SEMI>
-// }
-// void  Function_header(): {} {
-//   <RESERVED_FUNCTION> <IDENTIFIER> Qualified_method_identifier()
-
-// void FormalParameterList(): {} {
-//   <COLON> ResultType() (Modifers())? HintDirectives()
-// }
-
-
-
-// void procedureDeclaration(): {} {
-//   ProcedureHeader() <SEMI> Subroutine_block() <SEMI>
-// }
-
-
-// void ProcedureHeader(): {} {
-//   <RESERVED_PROCEDURE> <IDENTIFIER> | Qualified_method_identifier()
-// }
-
-
-// void FormalParameterList(): {} {
-//   (Modifiers())? HintDirectives()
-// }
-
-
-
-// void Subroutine_block(): {} {
-//   Block()
-// }
-
-
-
-
-
-// //statements
-
-// void While_statement(): {} {
-//   <RESERVED_WHILE> Expression() <RESERVED_DO> Statement()
-// }
-
-
-// void If_statement(): {} {
-//   <RESERVED_IF> Expression() <RESERVED_THEN> Statement() (<RESERVED_ELSE> Statement())?
-// }
-
-
-// void Compound_statement(): {} {
-//   <RESERVED_BEGIN> Statement() (<SEMI> Statement())*  <RESERVED_END>
-// }
-
-// void Repetitive_statement(): {} {
-//   For_statement() | For_In_statement() | Repeat_statement() | While_statement()
-// }
-
-// void Conditional_statement(): {} {
-//   Case_Statement() | If_Statement()
-// }
-
-
-// void Structured_statement(): {} {
-//   Compound_statement() | Conditional_statement() | Repetitive_statement()
-// }
-
-
-
-// void Goto_statement(): {} {
-//   <RESERVED_GOTO> <LABEL>
-// }
-
-
-// void Procedure_statement(): {} {
-//   Procedure_Identifier() | Method_identifier() | Qualified_method_identifier() | Variable_reference() (ActualParameterList())*
-// }
-
-
-// void Assignment_statement(): {} {
-//   (Variable_reference() | Function_identifier()) (<ASSIGMENT> | <PLUS_EQUALS> | <MINUS_EQUALS> | <TIMES_EQUALS> | <SLASH_EQUALS>) Expression()
-// }
-
-
-
-// void Simple_statement(): {} {
-//   Assignment_statement() | Procedure_statement() | Goto_statement() | Raise_Statement()
-// }
-
-
-// void statement(): {} {
-//   (<label> <COLON>)* (Simple_statement() | Structured_statement())*
-// }
-
-
-
-// //12.1 expressions
-// void ActualParameterList(): {}{
-//   <OPEN_PARENTHESIS> (Expression() <COMMA>)* <CLOSE_PARENTHESIS>
-// }
-
-// void Function_call(): {}{
-//   (Function_identifier() | Variable_reference()) ActualParameterList()
-// }
-
-
-// void Unsigned_constant(): {}{
-//   <UNSIGNED_NUMBER> | <CHARACTER_STRING> | Constant_Identifier() | <RESERVED_NIL>
-// }
-
-// void Factor(): {}
-// {
-//   <OPEN_PARENTHESIS> Expression() <CLOSE_PARENTHESIS> | Variable_reference() | Function_call() | UnsignedConstant() | <RESERVED_NOT> Factor | <SIGN> Factor()  
-// }
-// void Term(): {}{
-//   Factor() <ASTERISK> | <SLASH> | <RESERVED_DIV> | <RESERVED_MOD> | <RESERVED_AND> | <RESERVED_SHL> | <RESERVED_SHR> | <RESERVED_AS>
-// }
-
-// void Simple_expression(): {}{
-//   Term() <PLUS> | <MINUS> | <RESERVED_OR> | <RESERVED_XOR>
-// }
-
-
-// void Expression(): {}{
-//   Simple_expression()
-// }
-
-//a beleza do meomento present

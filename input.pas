@@ -44,19 +44,19 @@ begin
   begin
     if i = 11 then
     begin
-      writeln('Digite o primeiro número: ');
+      writeln('Digite o primeiro numero: ');
       readln(num1);
-      writeln('Digite o segundo número: ');
+      writeln('Digite o segundo numero: ');
       readln(num2);
 
       resultado := SomaNumeros(num1, num2);
-      writeln('A soma dos números é: ', resultado);
+      writeln('A soma dos numeros eh: ', resultado);
 
       writeln;
     end
     else
     begin
-      writeln('Caso Contrário');
+      writeln('Caso Contrario');
     end;
 
     i := i + 1;

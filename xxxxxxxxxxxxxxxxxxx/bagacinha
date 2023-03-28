@@ -1,0 +1,160 @@
+program -> programHeading block DOT
+programHeading -> RESERVED_PROGRAM IDENTIFIER OPEN_PARENTHESIS identifierList CLOSE_PARENTHESIS SEMI
+programHeading -> RESERVED_PROGRAM IDENTIFIER SEMI
+aux_rule0 -> constantDefinitionPart
+aux_rule0 -> variableDeclarationPart
+aux_rule0 -> procedureAndFunctionDeclarationPart
+aux_rule0 -> constantDefinitionPart aux_rule0
+aux_rule0 -> variableDeclarationPart aux_rule0
+aux_rule0 -> procedureAndFunctionDeclarationPart aux_rule0
+block -> aux_rule0 compoundStatement
+block -> compoundStatement
+aux_rule1 -> constantDefinition SEMI
+aux_rule1 -> constantDefinition SEMI aux_rule1
+constantDefinitionPart -> RESERVED_CONST aux_rule1
+constantDefinition -> IDENTIFIER EQUALS constant
+constant -> unsignedNumber
+constant -> sign unsignedNumber
+constant -> IDENTIFIER
+constant -> sign IDENTIFIER
+constant -> string
+unsignedNumber -> UNSIGNED_INTEGER
+unsignedNumber -> UNSIGNED_REAL
+sign -> PLUS
+sign -> MINUS
+bool_ -> TRUE
+bool_ -> FALSE
+string -> CHARACTER_STRING
+type_ -> simpleType
+type_ -> arrayType
+simpleType -> scalarType
+simpleType -> subrangeType
+simpleType -> typeIdentifier
+simpleType -> stringType
+scalarType -> OPEN_PARENTHESIS identifierList CLOSE_PARENTHESIS
+subrangeType -> constant DOTDOT constant
+typeIdentifier -> IDENTIFIER
+typeIdentifier -> CHAR
+typeIdentifier -> RESERVED_BOOLEAN
+typeIdentifier -> RESERVED_INTEGER
+typeIdentifier -> RESERVED_REAL
+typeIdentifier -> RESERVED_STRING
+stringType -> RESERVED_STRING OPEN_BRACKETS IDENTIFIER CLOSE_BRACKETS
+stringType -> RESERVED_STRING OPEN_BRACKETS unsignedNumber CLOSE_BRACKETS
+arrayType -> RESERVED_ARRAY OPEN_BRACKETS typeList CLOSE_BRACKETS RESERVED_OF typeIdentifier EQUALS OPEN_PARENTHESIS parameterList CLOSE_PARENTHESIS
+arrayType -> RESERVED_ARRAY OPEN_BRACKETS typeList CLOSE_BRACKETS RESERVED_OF typeIdentifier
+arrayType -> RESERVED_ARRAY OPEN_PARENTHESIS_DOT typeList DOT_CLOSE_PARENTHESIS RESERVED_OF typeIdentifier EQUALS OPEN_PARENTHESIS parameterList CLOSE_PARENTHESIS
+arrayType -> RESERVED_ARRAY OPEN_PARENTHESIS_DOT typeList DOT_CLOSE_PARENTHESIS RESERVED_OF typeIdentifier
+aux_rule2 -> COMMA indexType
+aux_rule2 -> COMMA indexType aux_rule2
+typeList -> indexType aux_rule2
+typeList -> indexType
+indexType -> simpleType
+aux_rule3 -> SEMI variableDeclaration
+aux_rule3 -> SEMI variableDeclaration aux_rule3
+variableDeclarationPart -> RESERVED_VAR variableDeclaration aux_rule3 SEMI
+variableDeclarationPart -> RESERVED_VAR variableDeclaration SEMI
+variableDeclaration -> identifierList COLON type_
+procedureAndFunctionDeclarationPart -> procedureDeclaration SEMI
+procedureAndFunctionDeclarationPart -> functionDeclaration SEMI
+procedureDeclaration -> RESERVED_PROCEDURE IDENTIFIER formalParameterList SEMI block
+procedureDeclaration -> RESERVED_PROCEDURE IDENTIFIER SEMI block
+aux_rule4 -> SEMI formalParameterSection
+aux_rule4 -> SEMI formalParameterSection aux_rule4
+formalParameterList -> OPEN_PARENTHESIS formalParameterSection aux_rule4 CLOSE_PARENTHESIS
+formalParameterList -> OPEN_PARENTHESIS formalParameterSection CLOSE_PARENTHESIS
+formalParameterList -> OPEN_PARENTHESIS aux_rule4 CLOSE_PARENTHESIS
+formalParameterList -> OPEN_PARENTHESIS CLOSE_PARENTHESIS
+formalParameterSection -> parameterGroup
+formalParameterSection -> RESERVED_VAR parameterGroup
+formalParameterSection -> RESERVED_FUNCTION parameterGroup
+formalParameterSection -> RESERVED_PROCEDURE parameterGroup
+parameterGroup -> identifierList COLON typeIdentifier
+aux_rule5 -> COMMA IDENTIFIER
+aux_rule5 -> COMMA IDENTIFIER aux_rule5
+identifierList -> IDENTIFIER aux_rule5
+identifierList -> IDENTIFIER
+functionDeclaration -> RESERVED_FUNCTION IDENTIFIER formalParameterList COLON resultType SEMI block
+functionDeclaration -> RESERVED_FUNCTION IDENTIFIER COLON resultType SEMI block
+resultType -> typeIdentifier
+statement -> simpleStatement
+statement -> structuredStatement
+simpleStatement -> assignmentStatement
+simpleStatement -> procedureStatement
+simpleStatement -> emptyStatement_
+assignmentStatement -> variable ASSIGNMENT expression
+aux_rule6 -> COMMA expression
+aux_rule6 -> COMMA expression aux_rule6
+aux_rule7 -> COMMA expression
+aux_rule7 -> COMMA expression aux_rule7
+aux_rule8 -> OPEN_BRACKETS expression aux_rule6 CLOSE_BRACKETS
+aux_rule8 -> OPEN_BRACKETS expression CLOSE_BRACKETS
+aux_rule8 -> OPEN_PARENTHESIS_DOT expression aux_rule7 DOT_CLOSE_PARENTHESIS
+aux_rule8 -> OPEN_PARENTHESIS_DOT expression DOT_CLOSE_PARENTHESIS
+aux_rule8 -> DOT IDENTIFIER
+aux_rule8 -> OPEN_BRACKETS expression aux_rule6 CLOSE_BRACKETS aux_rule8
+aux_rule8 -> OPEN_BRACKETS expression CLOSE_BRACKETS aux_rule8
+aux_rule8 -> OPEN_PARENTHESIS_DOT expression aux_rule7 DOT_CLOSE_PARENTHESIS aux_rule8
+aux_rule8 -> OPEN_PARENTHESIS_DOT expression DOT_CLOSE_PARENTHESIS aux_rule8
+aux_rule8 -> DOT IDENTIFIER aux_rule8
+variable -> IDENTIFIER aux_rule8
+variable -> IDENTIFIER
+expression -> simpleExpression relationalOperator expression
+expression -> simpleExpression
+relationalOperator -> EQUALS
+relationalOperator -> NOT_EQUALS
+relationalOperator -> LESS_THAN
+relationalOperator -> LESS_THAN_OR_EQUALS
+relationalOperator -> GREATHER_THAN_OR_EQUALS
+relationalOperator -> GREATER_THAN
+relationalOperator -> RESERVED_IN
+simpleExpression -> term additiveOperator simpleExpression
+simpleExpression -> term
+additiveOperator -> PLUS
+additiveOperator -> MINUS
+additiveOperator -> RESERVED_OR
+term -> signedFactor multiplicativeOperator term
+term -> signedFactor
+multiplicativeOperator -> ASTERISK
+multiplicativeOperator -> SLASH
+multiplicativeOperator -> RESERVED_DIV
+multiplicativeOperator -> RESERVED_MOD
+multiplicativeOperator -> RESERVED_AND
+signedFactor -> PLUS factor
+signedFactor -> MINUS factor
+signedFactor -> factor
+factor -> variable
+factor -> OPEN_PARENTHESIS expression CLOSE_PARENTHESIS
+factor -> functionDesignator
+factor -> unsignedConstant
+factor -> RESERVED_NOT factor
+factor -> bool_
+unsignedConstant -> unsignedNumber
+unsignedConstant -> string
+unsignedConstant -> RESERVED_NIL
+functionDesignator -> IDENTIFIER OPEN_PARENTHESIS parameterList CLOSE_PARENTHESIS
+aux_rule9 -> COMMA actualParameter
+aux_rule9 -> COMMA actualParameter aux_rule9
+parameterList -> actualParameter aux_rule9
+parameterList -> actualParameter
+procedureStatement -> IDENTIFIER OPEN_PARENTHESIS parameterList CLOSE_PARENTHESIS
+procedureStatement -> IDENTIFIER
+aux_rule10 -> parameterWidth
+aux_rule10 -> parameterWidth aux_rule10
+actualParameter -> expression aux_rule10
+actualParameter -> expression
+actualParameter -> aux_rule10
+actualParameter -> ''
+parameterWidth -> COLON expression
+emptyStatement_ -> ''
+structuredStatement -> compoundStatement
+structuredStatement -> ifStatement
+structuredStatement -> whileStatement
+compoundStatement -> RESERVED_BEGIN statements RESERVED_END
+aux_rule11 -> SEMI statement
+aux_rule11 -> SEMI statement aux_rule11
+statements -> statement aux_rule11
+statements -> statement
+ifStatement -> RESERVED_IF expression RESERVED_THEN statement RESERVED_ELSE statement
+ifStatement -> RESERVED_IF expression RESERVED_THEN statement
+whileStatement -> RESERVED_WHILE expression RESERVED_DO statement
