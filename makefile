@@ -4,7 +4,7 @@ all:
 	javacc main.jj
 	javac *.java
 	cls
-	java FreePascal teste.pas
+	java FreePascal input.pas
 	del *.java
 	del *.class
 clean:
